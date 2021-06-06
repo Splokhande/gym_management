@@ -17,8 +17,9 @@ class UserDetails {
   String gymProgram;
 
   UserDetails(
-      {this.name,
-        this.uid,
+      {
+      this.name,
+      this.uid,
       this.phoneNo,
       this.admissionBranch,
       this.admissionBranchId,
@@ -29,7 +30,8 @@ class UserDetails {
       this.height,
       this.doj,
       this.gymProgram,
-      this.profilePhoto});
+      this.profilePhoto
+      });
 
   toSharedPreferences(UserDetails user) async {
     print(user);
@@ -88,7 +90,7 @@ class UserDetails {
     return user;
   }
 
-   fromMap(DocumentSnapshot data) async {
+  fromMap(DocumentSnapshot data) async {
      UserDetails user = UserDetails();
 
        user = UserDetails(
@@ -108,7 +110,6 @@ class UserDetails {
 
     return user;
   }
-
 
   toMap(UserDetails details){
     return {

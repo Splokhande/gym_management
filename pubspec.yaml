@@ -50,9 +50,9 @@ dependencies:
 #  qr_flutter: ^1.1.1
   barcode_widget:
 #  barcode_scanner:
-#  flutter_barcode_scanner:
+  flutter_barcode_scanner:
   permission_handler:
-  r_scan:
+#  barcode_scan:
 dev_dependencies:
   flutter_test:
     sdk: flutter

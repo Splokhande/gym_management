@@ -230,6 +230,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_barcode_scanner:
+    dependency: "direct main"
+    description:
+      name: flutter_barcode_scanner
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_cupertino_date_picker:
     dependency: "direct main"
     description:
@@ -518,13 +525,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  r_scan:
-    dependency: "direct main"
-    description:
-      name: r_scan
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.5"
   riverpod:
     dependency: transitive
     description:
