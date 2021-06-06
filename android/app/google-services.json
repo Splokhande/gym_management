@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "202875425560",
+    "project_id": "gymmanagement-aebd0",
+    "storage_bucket": "gymmanagement-aebd0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202875425560:android:d09dc8efac163f8e0bc46d",
+        "android_client_info": {
+          "package_name": "com.app.paldes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "202875425560-citjq1a5j1eo0glrk2fgaau66797m358.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.paldes",
+            "certificate_hash": "d69ab6327d05ace76dda4db19a0c99a2cf49bd34"
+          }
+        },
+        {
+          "client_id": "202875425560-km118npsh12br63pmmb22jlrmmoggsqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe_fcqy0n-495m7tV8CxBPu2q8u53dQQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "202875425560-km118npsh12br63pmmb22jlrmmoggsqd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
