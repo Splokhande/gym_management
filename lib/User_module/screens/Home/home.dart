@@ -6,6 +6,7 @@ import 'package:paldes/Widgets/image.dart';
 import 'package:paldes/User_module/riverpod/auth.dart';
 import 'package:paldes/User_module/riverpod/page.dart';
 import 'package:paldes/User_module/screens/Home/header.dart';
+import 'package:paldes/Widgets/text.dart';
 import 'package:paldes/utils/colors.dart';
 
 class Home extends StatefulWidget {
@@ -140,13 +141,22 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Image.asset(page.selectedBottomNav == i
-                                      ? page.selectedImage[i]
-                                      : page.unselectedImage[i]),
+                                  Expanded(
+                                    child: Image.asset(page.selectedBottomNav == i
+                                        ? page.selectedImage[i]
+                                        : page.unselectedImage[i]),
+                                  ),
                                   SizedBox(
                                     height: 0.01.sh,
                                   ),
-                                  Text(page.bottomNav[i]),
+                                  Expanded(
+                                    child: PText(text:page.bottomNav[i],
+                                    color: TEXT_COLOR,
+                                      isWhite: false,
+                                      isMd: false,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

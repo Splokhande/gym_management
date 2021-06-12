@@ -1,37 +1,69 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+part 'User.g.dart';
 
-class UserDetails {
+@HiveType(typeId: 0)
+class UserDetails extends HiveObject{
+
+  @HiveField(0)
   String uid;
+
+  @HiveField(1)
   String name;
+
+  @HiveField(2)
   String phoneNo;
+
+  @HiveField(3)
   String admissionBranchId;
+
+  @HiveField(4)
   String admissionBranch;
+
+  @HiveField(5)
   String dob;
+
+  @HiveField(6)
   String dobStamp;
+
+  @HiveField(7)
   String gender;
+
+  @HiveField(8)
   String weight;
+
+  @HiveField(9)
   String height;
+
+  @HiveField(10)
   String doj; // date of joining
+
+  @HiveField(11)
   String profilePhoto;
+
+  @HiveField(12)
   String gymProgram;
 
-  UserDetails(
-      {
-      this.name,
-      this.uid,
-      this.phoneNo,
-      this.admissionBranch,
-      this.admissionBranchId,
-      this.dob,
-      this.gender,
-      this.dobStamp,
-      this.weight,
-      this.height,
-      this.doj,
-      this.gymProgram,
-      this.profilePhoto
-      });
+  @HiveField(13)
+  bool status;
+
+  UserDetails({
+    this.name,
+    this.uid,
+    this.phoneNo,
+    this.admissionBranch,
+    this.admissionBranchId,
+    this.dob,
+    this.gender,
+    this.dobStamp,
+    this.weight,
+    this.height,
+    this.doj,
+    this.gymProgram,
+    this.profilePhoto,
+    this.status
+   });
 
   toSharedPreferences(UserDetails user) async {
     print(user);
@@ -49,6 +81,7 @@ class UserDetails {
     sp.setString("doj", user.doj);
     sp.setString("profilePhoto", user.profilePhoto);
     sp.setString("gymProgram", user.gymProgram);
+    sp.setBool("status", user.status);
   }
 
   fromSharedPrefernces() async {
@@ -69,6 +102,7 @@ class UserDetails {
         profilePhoto: sp.getString("profilePhoto"),
         weight: sp.getString("weight"),
         gymProgram: sp.getString("gymProgram"),
+        status: sp.getBool("status")
       );
     }else{
       user = UserDetails(
@@ -85,6 +119,7 @@ class UserDetails {
         uid: "",
         gymProgram: "",
         admissionBranchId: "",
+        status: false
       );
     }
     return user;
@@ -105,6 +140,7 @@ class UserDetails {
           profilePhoto: data["profilePhoto"] ?? "",
           weight: data["weight"] ?? "",
           uid: data["uid"] ?? "",
+          status: data["status"] ?? true,
           admissionBranchId: data["admissionBranchId"] ?? "",
           gymProgram: data["gymProgram"] ?? "");
 
@@ -126,6 +162,7 @@ class UserDetails {
       "admissionBranch":details.admissionBranch?? "",
       "admissionBranchId":details.admissionBranchId?? "",
       "gymProgram":details.gymProgram?? "",
+      "status":details.status?? true,
     };
   }
 

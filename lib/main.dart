@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:paldes/modal/Attendance.dart';
+import 'package:paldes/modal/User.dart';
 import 'package:paldes/routes.dart';
 import 'package:paldes/User_module/screens/splash.dart';
 import 'package:paldes/themeProvider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async{
 
@@ -14,6 +18,11 @@ void main() async{
   // Status bar style on Android/iOS
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle());
   await core.Firebase.initializeApp();
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserDetailsAdapter());
+  Hive.registerAdapter(AttendanceAdapter());
+  await Hive.openBox<Attendance>('attendance');
+
   // FirebaseApp defaultApp = Firebase.app();
   runApp(ProviderScope(child: MainPage()));
 
@@ -44,7 +53,6 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(414, 896),
-      // allowFontScaling: false,
       builder: () => MaterialApp(
         title: 'Paldes',
         theme: Styles.themeData(false, context),
