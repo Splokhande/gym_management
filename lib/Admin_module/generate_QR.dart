@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/material.dart';
+import 'package:paldes/User_module/riverpod/attendance.dart';
 import 'package:paldes/User_module/riverpod/home.dart';
 import 'package:paldes/Widgets/text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

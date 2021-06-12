@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:paldes/Hive/boxes.dart';
+import 'package:paldes/User_module/riverpod/attendance.dart';
 import 'package:paldes/User_module/riverpod/home.dart';
 import 'package:paldes/modal/Attendance.dart';
 
@@ -42,7 +43,7 @@ class QRScanner extends HookWidget {
 
 
 class MyAttendanceCalender extends StatelessWidget {
-  // const MyAttendanceList({Key? key}) : super(key: key);
+  const MyAttendanceCalender({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +56,8 @@ class MyAttendanceCalender extends StatelessWidget {
             itemCount: attendance.length,
             itemBuilder: (BuildContext context, int i) {
               return ListTile(
-                title: Text("${attendance[i].dateTime}"),
-                subtitle: Text("${attendance[i].branchName}"),
+                title: Text("Check In${attendance[i].checkIn}"),
+                subtitle: Text("CheckOut ${attendance[i].checkOut}"),
               );
             },
 

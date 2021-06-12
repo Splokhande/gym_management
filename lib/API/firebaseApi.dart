@@ -27,7 +27,13 @@ class FirebaseDb {
                     .get();
     }
 
+    markAttendance(data,id)async{
 
-
+      return await firebase.collection("Attendance")
+          .doc(id)
+          .set(
+            data
+      );
+    }
 
 }

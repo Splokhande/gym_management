@@ -31,7 +31,7 @@ dependencies:
   flutter_cupertino_date_picker:
   numberpicker:
   badges:
-  flutter_riverpod:
+  flutter_riverpod: 0.14.0+3
   hooks_riverpod:
   progress_dialog:
   dio:
@@ -55,6 +55,7 @@ dependencies:
 #  barcode_scan:
   hive:
   hive_flutter:
+  table_calendar:
 
 dev_dependencies:
   flutter_test:

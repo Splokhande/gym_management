@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:paldes/Widgets/image.dart';
 import 'package:paldes/User_module/riverpod/auth.dart';
 import 'package:paldes/User_module/riverpod/page.dart';
-import 'package:paldes/User_module/screens/Home/header.dart';
+import 'package:paldes/User_module/screens/Home/BottomScreen/Home/header.dart';
 import 'package:paldes/Widgets/text.dart';
 import 'package:paldes/utils/colors.dart';
 

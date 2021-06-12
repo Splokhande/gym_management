@@ -11,6 +11,10 @@ import 'package:flutter/cupertino.dart';
   final Color TEXT_COLOR = Color(0xff000000);
   final Color HINT_COLOR = Color(0xffFFFFFF).withAlpha(99);
   final Color DECORATION_COLOR = Color(0xffFFFFFF);
+
+  final Color ATTENDANCE_COLOR = Color(0xff2EFF2E);
+
+
   
 
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paldes/User_module/screens/Auth/registration.dart';
-import 'package:paldes/User_module/screens/Home/home.dart';
+import 'package:paldes/User_module/screens/Home/BottomScreen/Home/home.dart';
 import 'package:paldes/User_module/screens/Auth/login.dart';
 import 'package:paldes/User_module/screens/splash.dart';
 

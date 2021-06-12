@@ -5,7 +5,7 @@ part 'Attendance.g.dart';
 class Attendance extends HiveObject {
 
   @HiveField(0)
-  DateTime dateTime;
+  DateTime checkIn;
 
   @HiveField(1)
   int timestamp;
@@ -20,5 +20,8 @@ class Attendance extends HiveObject {
 
   @HiveField(4)
   String punchedBy;
+
+  @HiveField(5)
+  DateTime checkOut;
 
 }
