@@ -11,6 +11,7 @@ import 'package:paldes/User_module/riverpod/auth.dart';
 import 'package:paldes/User_module/riverpod/page.dart';
 import 'package:paldes/User_module/screens/Home/tabBarScreen/attendance.dart';
 import 'package:paldes/Widgets/text.dart';
+import 'package:paldes/calendar.dart';
 import 'package:paldes/modal/Attendance.dart';
 import 'package:paldes/utils/colors.dart';
 import 'package:paldes/utils/text.dart';
@@ -22,9 +23,9 @@ class MyAttendanceScreen extends HookWidget {
   Widget build(BuildContext context) {
     final auth = useProvider(authProvider);
     final attend = useProvider(attendanceProvider);
-    final pages = useProvider(appPages);
+
     return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -44,6 +45,7 @@ class MyAttendanceScreen extends HookWidget {
                     color: Theme.of(context).primaryColor,
 
                   ),
+                  if(auth.userDetails.uid != null)
                   SizedBox(
                     width: 0.5.sw,
                     child: PText(
@@ -85,7 +87,7 @@ class MyAttendanceScreen extends HookWidget {
                       ),
                       PText(
                         color: Theme.of(context).backgroundColor,
-                        text: pages.getFromDate(),
+                        text: attend.getFromDate(),
                         fontSize: 13.sp,
                       ),
                     ],
@@ -107,7 +109,7 @@ class MyAttendanceScreen extends HookWidget {
                       ),
                       PText(
                         color: Theme.of(context).primaryColor,
-                        text: pages.getToDate(),
+                        text: attend.getToDate(),
                         fontSize: 13.sp,
                       ),
                     ],
@@ -116,72 +118,18 @@ class MyAttendanceScreen extends HookWidget {
               ],
             ),
           ),
-          SizedBox(height: 0.05.sh,),
-          TableCalendar<Attendance>(
-            focusedDay: DateTime.now(),
-            firstDay:  DateFormat.yMMMMd().parse(auth.userDetails.doj)
-                .difference(DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day))
-                < Duration(days: 90)?  DateFormat.yMMMMd().parse(auth.userDetails.doj) : DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day),
-            lastDay: DateTime.now(),
-            calendarStyle: CalendarStyle(
-                todayDecoration: BoxDecoration(
-
-                )
-            ),
-            onDaySelected: (DateTime date, DateTime date2){
-              attend.onDaySelected(date);
-            },
-            calendarBuilders: CalendarBuilders(
-              markerBuilder: (context, day, events) => Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(10),
-                    color: attend.dateExist(day)
-                        ?
-                    ATTENDANCE_COLOR
-                        :
-                    Theme.of(context).primaryColor,
-                  ),
-                  width: MediaQuery.of(context).size.width*0.45,
-                  height:  MediaQuery.of(context).size.width*0.12,
-                  child: Center(
-                    child: Text(
-                      "${day.day}",
-                      style: TextStyle().copyWith(
-                        color: attend.dateExist(day)
-                            ?
-                        TEXT_COLOR
-                            :
-                        Theme.of(context).backgroundColor,
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-            ),
+          Expanded(
+            child: Container(
+                height: 0.1.sh,
+                width: 1.sw,
+                child: Calender()),
           ),
 
-            ListTile(
-                  title: Text("Check In${ attend.attendance.checkIn}"),
-                  subtitle: Text("CheckOut ${ attend.attendance.checkOut}"),
-                ),
-          // ListView.builder(
-          //   itemCount: attend.myAttendance.length,
-          //   itemBuilder: (BuildContext context, int i) {
-          //     return ListTile(
-          //       title: Text("Check In${ attend.myAttendance[i].checkIn}"),
-          //       subtitle: Text("CheckOut ${ attend.myAttendance[i].checkOut}"),
-          //     );
-          //   },
-          //
-          //
-          // )
+          SizedBox(height: 0.05.sh,),
+              if(attend.attendance.checkIn != null)
+                  ListTile(
+                title: Text("Check In Time: ${attend.getFromattedDate(attend.attendance.checkIn)}"),
+              ),
         ]
     );
   }

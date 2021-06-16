@@ -24,4 +24,26 @@ class Attendance extends HiveObject {
   @HiveField(5)
   DateTime checkOut;
 
+  Attendance(
+      {this.checkIn,
+      this.timestamp,
+      this.branchId,
+      this.branchName,
+      this.uid,
+      this.userName,
+      this.punchedBy,
+      this.checkOut});
+
+  factory Attendance.fromMap(json){
+    return Attendance(
+      branchId: json["branchId"],
+      branchName: json["branchName"],
+      checkIn: json["dateTime"],
+      punchedBy: json["punchedBy"],
+      timestamp: json["timestamp"],
+      uid: json["uid"],
+      userName: json["username"]
+    );
+  }
+
 }

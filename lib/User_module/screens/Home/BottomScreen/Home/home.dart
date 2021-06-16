@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:paldes/Hive/boxes.dart';
+import 'package:paldes/User_module/riverpod/attendance.dart';
 import 'package:paldes/Widgets/image.dart';
 import 'package:paldes/User_module/riverpod/auth.dart';
 import 'package:paldes/User_module/riverpod/page.dart';
@@ -44,6 +47,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           builder: (_,watch,widget){
             var auth = watch(authProvider);
             var page = watch(appPages);
+            var attendance = watch(attendanceProvider);
             if(auth.userDetails.name == "" ||auth.userDetails.name == null )
             auth.populateUserDetails();
             return Column(
@@ -76,6 +80,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                               children: [
                                 IconButton(icon: Icon(Icons.qr_code_scanner,color: Theme.of(context).primaryColor,), onPressed: ()async{
 
+                                  await attendance.scanQR(context);
                                 }),
                                 SizedBox(width: 0.08.sw,),
                                 Image.asset("assets/gymui/noun_Bell_-3.png",width: 0.04.sw,),

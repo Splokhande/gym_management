@@ -75,7 +75,10 @@ class AppPages extends ChangeNotifier{
     "Settings",
   ];
 
-  AppPages(this.ref);
+  AppPages(this.ref){
+    ref.watch(attendanceProvider).myAttendance=
+        ref.watch(attendanceProvider).getAttendanceList(DateTime.now());
+  }
 
 
   topbar(context){
@@ -146,7 +149,7 @@ class AppPages extends ChangeNotifier{
                     controller: tabController,
                     children: [
                       // GenerateQR(),
-                      QRScanner(),
+                      MyAttendanceScreen(),
                       for(int i=1; i< topTabs.length; i++)...[
                         Container(
                           child: Center(
@@ -227,29 +230,8 @@ class AppPages extends ChangeNotifier{
      notifyListeners();
    }
 
-   String getFromDate(){
-     DateFormat format = DateFormat('dd MMMM yyyy');
-      var auth = ref.watch(authProvider);
-      int duration =  DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day)
-          .difference(DateFormat.yMMMMd().parse(auth.userDetails.doj)).inDays       ;
-      print(duration);
-     print(  DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day)
-         .difference(DateFormat.yMMMMd().parse(auth.userDetails.doj)).inDays
-          < 90 );
-     DateTime date =   DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day)
-         .difference(DateFormat.yMMMMd().parse(auth.userDetails.doj)).inDays < 90?  DateFormat.yMMMMd().parse(auth.userDetails.doj) : DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day);
 
 
-     // DateTime date = DateTime(DateTime.now().year,DateTime.now().month-2,DateTime.now().day);
-
-    return (format.format(date)).toString();
-   }
-
-   String getToDate(){
-    DateTime date = DateTime.now();
-    DateFormat format = DateFormat('dd MMMM yyyy');
-    return (format.format(date)).toString();
-   }
 
   Widget getProfileScreen(context) {
     final auth = ref.watch(authProvider);

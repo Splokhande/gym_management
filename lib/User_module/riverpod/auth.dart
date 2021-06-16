@@ -8,15 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:paldes/API/firebaseApi.dart';
+import 'package:paldes/Hive/boxes.dart';
+import 'package:paldes/User_module/riverpod/attendance.dart';
 import 'package:paldes/Widgets/dialog.dart';
 import 'package:paldes/Widgets/text.dart';
+import 'package:paldes/modal/Attendance.dart';
 import 'package:paldes/modal/User.dart';
 import 'package:paldes/utils/text.dart';
 
-final authProvider = ChangeNotifierProvider((ref) => AuthProvider(ref));
+final authProvider = ChangeNotifierProvider<AuthProvider>((ref) => AuthProvider(ref));
 
 class AuthProvider extends ChangeNotifier {
   UserCredential user;
@@ -635,6 +639,8 @@ class AuthProvider extends ChangeNotifier {
         // userDetails = await userDetails.fromMap(await api.login(user.user.uid));
         Navigator.pushNamedAndRemoveUntil(context, '/selectBranch', (route) => false);
       }else{
+        await ref.watch(attendanceProvider).populateAttendance(auth.currentUser.uid);
+
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       }
 
@@ -803,4 +809,7 @@ class AuthProvider extends ChangeNotifier {
      userDetails.weight = "$value $weightType";
      notifyListeners();
    }
+
+
+
 }

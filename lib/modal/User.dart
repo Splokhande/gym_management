@@ -46,7 +46,7 @@ class UserDetails extends HiveObject{
   String gymProgram;
 
   @HiveField(13)
-  bool status;
+  String status;
 
   UserDetails({
     this.name,
@@ -80,8 +80,8 @@ class UserDetails extends HiveObject{
     sp.setString("height", user.height);
     sp.setString("doj", user.doj);
     sp.setString("profilePhoto", user.profilePhoto);
-    sp.setString("gymProgram", user.gymProgram);
-    sp.setBool("status", user.status);
+    sp.setString("gymProgram", user.gymProgram ?? "");
+    sp.setString("status", user.status);
   }
 
   fromSharedPrefernces() async {
@@ -102,7 +102,7 @@ class UserDetails extends HiveObject{
         profilePhoto: sp.getString("profilePhoto"),
         weight: sp.getString("weight"),
         gymProgram: sp.getString("gymProgram"),
-        status: sp.getBool("status")
+        status: sp.getString("status")
       );
     }else{
       user = UserDetails(
@@ -119,13 +119,13 @@ class UserDetails extends HiveObject{
         uid: "",
         gymProgram: "",
         admissionBranchId: "",
-        status: false
+        status: ""
       );
     }
     return user;
   }
 
-  fromMap(DocumentSnapshot data) async {
+  UserDetails fromMap(DocumentSnapshot data) {
      UserDetails user = UserDetails();
 
        user = UserDetails(
@@ -140,7 +140,7 @@ class UserDetails extends HiveObject{
           profilePhoto: data["profilePhoto"] ?? "",
           weight: data["weight"] ?? "",
           uid: data["uid"] ?? "",
-          status: data["status"] ?? true,
+          status: data["status"] ,
           admissionBranchId: data["admissionBranchId"] ?? "",
           gymProgram: data["gymProgram"] ?? "");
 

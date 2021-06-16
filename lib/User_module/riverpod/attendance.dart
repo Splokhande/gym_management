@@ -5,7 +5,10 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:paldes/API/firebaseApi.dart';
@@ -15,6 +18,9 @@ import 'package:paldes/Widgets/text.dart';
 import 'package:paldes/modal/Attendance.dart' as model;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+import 'auth.dart';
 
 var attendanceProvider = ChangeNotifierProvider<AttendanceProvider>((ref)=>AttendanceProvider(ref));
 
@@ -34,8 +40,17 @@ class AttendanceProvider extends ChangeNotifier{
   List<DateTime> dateList = [];
   Box<model.Attendance> box;
   DateTime selectedDate = DateTime.now();
-  AttendanceProvider(ref){
+  CalendarFormat calendarFormat = CalendarFormat.month;
+
+
+
+  AttendanceProvider(this.ref){
     getBranch();
+    getAttendanceList(DateTime.now());
+  }
+
+  String getFromattedDate(date){
+    return  DateFormat("HH:mm").format(date);
   }
 
   bool dateExist(day){
@@ -53,14 +68,43 @@ class AttendanceProvider extends ChangeNotifier{
   }
 
   onDaySelected(date){
+    myAttendance.clear();
+    box = Boxes.getAttendance();
+    myAttendance = box.values.toList().cast<model.Attendance>();
+    // myAttendance = Boxes.getAttendance() as List<model.Attendance>;
     selectedDate = DateFormat.yMMMMd().parse(DateFormat.yMMMMd().format(date));
-    print(selectedDate);
+    // print(selectedDate);
     for(int i=0; i<myAttendance.length;i++){
-      print(DateFormat.yMMMMd().parse(DateFormat.yMMMMd().format(myAttendance[i].checkIn)));
-      if(DateFormat.yMMMMd().parse(DateFormat.yMMMMd().format(myAttendance[i].checkIn)) == date)
+      // print(DateFormat.yMMMMd().parse(DateFormat.yMMMMd().format(myAttendance[i].checkIn)));
+      if(DateFormat.yMMMMd().parse(DateFormat.yMMMMd().format(myAttendance[i].checkIn)) == selectedDate)
       attendance = myAttendance[i];
     }
-    notifyListeners();
+   notifyListeners();
+  }
+
+
+  String getToDate(){
+    DateTime date = DateTime.now();
+    DateFormat format = DateFormat('dd MMMM yyyy');
+    return (format.format(date)).toString();
+  }
+
+  String getFromDate(){
+    DateFormat format = DateFormat('dd MMMM yyyy');
+    var auth = ref.watch(authProvider);
+    int duration =  DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day)
+        .difference(DateFormat.yMMMMd().parse(auth.userDetails.doj)).inDays       ;
+    // print(duration);
+    // print(  DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day)
+    //     .difference(DateFormat.yMMMMd().parse(auth.userDetails.doj)).inDays
+    //     < 90 );
+    DateTime date =   DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day)
+        .difference(DateFormat.yMMMMd().parse(auth.userDetails.doj)).inDays < 90?  DateFormat.yMMMMd().parse(auth.userDetails.doj) : DateTime(DateTime.now().year,DateTime.now().month-3,DateTime.now().day);
+
+
+    // DateTime date = DateTime(DateTime.now().year,DateTime.now().month-2,DateTime.now().day);
+
+    return (format.format(date)).toString();
   }
 
   punchAttendance()async{
@@ -68,34 +112,36 @@ class AttendanceProvider extends ChangeNotifier{
     if(myAttendance.where(
             (element) => DateFormat.yMMMd().format(element.checkIn)
                 == DateFormat.yMMMd().format(DateTime.now())).length >0 )
-      return print("Already marked");
-
-    String id = firebase.collection("Attendance")
-        .doc().id;
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    attendance = model.Attendance()
-      ..checkIn = DateTime.now()
-      ..timestamp = DateTime.now().millisecondsSinceEpoch
-      ..branchId = "70133aG5XJxyP1LSWmIp"
-      ..branchName = "Ashok Nagar"
-      ..uid = sp.getString('uid')
-      ..userName = sp.getString('name')
+      print("Already marked");
+else{
+      String id = firebase.collection("Attendance")
+          .doc().id;
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      attendance = model.Attendance()
+        ..checkIn = DateTime.now()
+        ..timestamp = DateTime.now().millisecondsSinceEpoch
+        ..branchId = "70133aG5XJxyP1LSWmIp"
+        ..branchName = "Ashok Nagar"
+        ..uid = sp.getString('uid')
+        ..userName = sp.getString('name')
       // ..checkOut = sp.getString('')
-      ..punchedBy = sp.getString('');
-    var data = {
-    "dateTime" : DateTime.now(),
-    "timestamp" : DateTime.now().millisecondsSinceEpoch,
-    "branchId" : "70133aG5XJxyP1LSWmIp",
-    "branchName" : "Ashok Nagar",
-    "uid" : sp.getString('uid'),
+        ..punchedBy = sp.getString('');
+      var data = {
+        "checkIn" : DateTime.now(),
+        "timestamp" : DateTime.now().millisecondsSinceEpoch,
+        "branchId" : "70133aG5XJxyP1LSWmIp",
+        "branchName" : "Ashok Nagar",
+        "uid" : sp.getString('uid'),
         "userName" : sp.getString('name'),
-    "punchedBy" : sp.getString('')
-    };
-    box = Boxes.getAttendance();
-    box.add(attendance);
-    FirebaseDb api = FirebaseDb();
-   await api.markAttendance(data, id);
-   print("Attendance MArked");
+        "punchedBy" : sp.getString('')
+      };
+      box = Boxes.getAttendance();
+      box.add(attendance);
+      FirebaseDb api = FirebaseDb();
+      await api.markAttendance(data, id);
+      print("Attendance MArked");
+    }
+
   }
 
   getAttendanceList(date){
@@ -114,6 +160,11 @@ class AttendanceProvider extends ChangeNotifier{
     return myAttendance;
   }
 
+  clearAttendance()async{
+    await box.delete('attendance');
+    print(box.length);
+    notifyListeners();
+  }
 
   Future<bool> canReadStorage() async {
     if(Platform.isIOS) return true;
@@ -175,27 +226,47 @@ class AttendanceProvider extends ChangeNotifier{
 
     String barcodeScanRes;
     barcodeScanRes = "{\"area\":\"Ashok Nagar\",\"id\":\"70133aG5XJxyP1LSWmIp\"}";
-    // // Platform messages may fail, so we use a try/catch PlatformException.
-    // try {
-    //   barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-    //       '#ff6666', 'Cancel', true, ScanMode.QR);
-    //   print(barcodeScanRes);
-    // } on PlatformException {
-    //   barcodeScanRes = 'Failed to get platform version.';
-    //   showToast(barcodeScanRes,context: context,position: StyledToastPosition.bottom);
-    //
-    // }
-    //
-    // // If the widget was removed from the tree while the asynchronous platform
-    // // message was in flight, we want to discard the reply rather than calling
-    // // setState to update our non-existent appearance.
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+      showToast(barcodeScanRes,context: context,position: StyledToastPosition.bottom);
+
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
 
 
     scanBarcode = barcodeScanRes;
 
   }
 
+  populateAttendance(id)async{
+    Box<model.Attendance>  box = Boxes.getAttendance();
+    int date = DateTime(DateTime.now().year,DateTime.now().month -3, DateTime.now().day).millisecondsSinceEpoch;
+      if(box.length==0){
+        QuerySnapshot query = await FirebaseFirestore.instance.collection("Attendance")
+                                  .where("uid",isEqualTo: id)
+                                  .where("timestamp", isGreaterThan: date)
+                                  .get();
+        for(int i=0; i<query.docs.length; i++){
+          attendance = model.Attendance.fromMap(query.docs[i]);
+          box.add(attendance);
+        }
 
+      }
+
+  }
+
+   formatChange(format) {
+    calendarFormat = format;
+    notifyListeners();
+   }
 
 
 

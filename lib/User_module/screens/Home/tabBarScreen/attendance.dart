@@ -3,9 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:paldes/Admin_module/userlist.dart';
 import 'package:paldes/Hive/boxes.dart';
 import 'package:paldes/User_module/riverpod/attendance.dart';
 import 'package:paldes/User_module/riverpod/home.dart';
+import 'package:paldes/calendar.dart';
 import 'package:paldes/modal/Attendance.dart';
 
 
@@ -19,8 +21,12 @@ class QRScanner extends HookWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (_)=>MyAttendanceCalender()));
+          Navigator.push(context, MaterialPageRoute(
+              builder: (_)=>
+              UserList()
 
+                  // Calender()
+          ));
         },
         child:  Icon(Icons.list,color: Theme.of(context).backgroundColor,),
 
@@ -31,7 +37,7 @@ class QRScanner extends HookWidget {
         children: [
           ElevatedButton(
               onPressed: () =>
-                  getBranch.punchAttendance(),
+                  getBranch.scanQR(context),
               child: Text('Start QR scan')
           ),
         ],
